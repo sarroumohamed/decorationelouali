@@ -18,7 +18,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Decoration El Ouali — مفروشات و تنجيد · طنجة">
 <meta property="og:description" content="صالونات مغربية وعصرية على المقاس، ستائر و ديكور داخلي بطنجة — معرض أعمال كامل.">
-<!-- ضع هنا رابط الصورة كاملاً بعد رفع المجلد على GitHub Pages -->
+<!-- صورة المعاينة في الواتساب — أبقِ cover.png في نفس المجلد لأن الواتساب لا يدعم الفيديو -->
 <meta property="og:image" content="https://USERNAME.github.io/nfc4all/clients/decoration-el-ouali/cover.png">
 <link rel="icon" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
@@ -33,7 +33,8 @@ var CARD = {
 
   /* --- الهوية البصرية --- */
   accent   : "#B3252B",          // أحمر البطاقة · للأزرق استعمل "#1B3E8B"
-  cover    : "cover.png",        // صورة الغلاف (عرضية 1200×600) — في نفس مجلد index.html
+  cover    : "cover.mp4",        // ✅ الغلاف الآن فيديو — يدعم mp4 · webm · mov · m4v · ogv
+  coverPoster: "cover.png",      // صورة ثابتة تظهر قبل تشغيل الفيديو (اختياري — اتركها "" لإلغائها)
   logo     : "logo.png",         // الشعار (مربعة 400×400) — في نفس المجلد
   logoShape: "square",           // "square" للمحلات · "circle" للأشخاص
 
@@ -56,7 +57,7 @@ var CARD = {
 
   /* --- أزرار التواصل (اتركها "" لإخفائها) --- */
   phone      : "+212668500602",
-  phone2     : "",              // الرقم الثاني إن أردت: "+212674618375"
+  phone2     : "",
   phone2Label: { ar:"اتصال 2", fr:"Appeler 2", en:"Call 2" },
   whatsapp   : "212668500602",
   whatsappMsg: {
@@ -64,7 +65,7 @@ var CARD = {
     fr:"Bonjour, je souhaite des informations sur vos salons et travaux de tapisserie.",
     en:"Hello, I would like information about your sofas and upholstery work."
   },
-  maps      : "",   // ضع هنا رابط Google Maps عندما يصلك — الزر يظهر تلقائياً
+  maps      : "",
   facebook  : "https://web.facebook.com/profile.php?id=100078720046326&locale=fr_FR",
   instagram : "https://www.instagram.com/decorationelouali/",
   threads   : "",
@@ -74,9 +75,7 @@ var CARD = {
   website   : "",
 
   /* --- روابط إضافية اختيارية --- */
-  extraLinks: [
-    // { icon:"globe", url:"https://…", label:{ ar:"كاطالوغ", fr:"Catalogue", en:"Catalogue" } }
-  ],
+  extraLinks: [],
 
   /* --- الخدمات (بدون أثمنة) --- */
   services: [
@@ -87,8 +86,7 @@ var CARD = {
     { label:{ ar:"ديكور داخلي وتنسيق الفضاء",      fr:"Décoration intérieure & aménagement",   en:"Interior decoration & space planning" } }
   ],
 
-  /* --- معرض الأعمال — الصور في نفس مجلد index.html ---
-     لحذف صورة: امسح سطرها · لتغيير الترتيب: حرّك الأسطر --- */
+  /* --- معرض الأعمال — الصور في نفس مجلد index.html --- */
   gallery: [
     "WhatsApp Image 2026-09-08 at 6.11.45 PM (1).jpeg",
     "WhatsApp Image 2026-09-08 at 6.11.45 PM (2).jpeg",
@@ -181,7 +179,9 @@ a{color:inherit}
 
 /* ---- الغلاف ومبدّل اللغة ---- */
 .cover{position:relative;aspect-ratio:16/8;background:var(--soft2);overflow:hidden}
-.cover>img{width:100%;height:100%;object-fit:cover;display:block}
+/* ✅ صورة أو فيديو الغلاف — نفس المعالجة */
+.cover>img,.cover>video{width:100%;height:100%;object-fit:cover;display:block}
+.cover>video{background:#000}
 .langs{position:absolute;top:12px;inset-inline-end:12px;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(12,12,12,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:3}
 .langs button{min-width:48px;height:40px;border:0;border-radius:999px;background:transparent;color:#fff;font:600 14px/1 inherit;cursor:pointer;padding:0;transition:background .25s,color .25s}
 .langs button[aria-pressed="true"]{background:#fff;color:#111}
@@ -269,32 +269,27 @@ html[dir="ltr"] .sec h2{letter-spacing:.09em;text-transform:uppercase}
 @keyframes fadeSwap{from{opacity:0}to{opacity:1}}
 
 .anim .rise{opacity:0;animation:riseIn .62s cubic-bezier(.22,.68,.32,1) forwards;animation-delay:var(--d,0ms)}
-/* أمان: إن لم تعمل الحركة لأي سبب، يبقى المحتوى مرئياً دائماً */
 .anim.done .rise{opacity:1!important;animation:none!important;transform:none!important}
 .anim .avatar{animation:popIn .74s cubic-bezier(.2,.8,.25,1) .10s both}
-.anim .cover>img{animation:coverIn 1.5s cubic-bezier(.2,.7,.3,1) both}
+/* ✅ نفس حركة الدخول للصورة أو الفيديو */
+.anim .cover>img,.anim .cover>video{animation:coverIn 1.5s cubic-bezier(.2,.7,.3,1) both}
 
-/* نبضة خفيفة جداً على زر الواتساب لجذب النظر بلطف */
 .anim .action.wa::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;animation:ringPulse 4.2s ease-out 2s infinite}
-/* لمعة ناعمة تمر على الزر الرئيسي كل بضع ثوانٍ */
 .anim .btn::after{content:"";position:absolute;top:0;bottom:0;inset-inline-start:0;width:34%;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.34),transparent);transform:translateX(-150%) skewX(-18deg);animation:sheen 6s ease-in-out 2.4s infinite}
 
-/* ظهور تدريجي للأقسام أثناء التمرير */
 .anim .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,.68,.32,1)}
 .anim .reveal.in{opacity:1;transform:none}
 
-/* ظهور أنعم وأطول لصور المعرض مع تقريب خفيف يهدأ تدريجياً */
 .anim .gallery .reveal{opacity:0;transform:translateY(34px) scale(.965);transition:opacity .85s ease,transform .95s cubic-bezier(.22,.68,.32,1)}
 .anim .gallery .reveal.in{opacity:1;transform:none}
 .anim .gallery .reveal img{transform:scale(1.08);transition:transform 1.35s cubic-bezier(.2,.7,.3,1)}
 .anim .gallery .reveal.in img{transform:none}
 
-/* تبديل اللغة بانتقال ناعم بدل قفزة */
 .swap{animation:fadeSwap .34s ease both}
 
 @media (prefers-reduced-motion: reduce){
   *{transition:none!important}
-  .anim .rise,.anim .avatar,.anim .cover>img,.swap{animation:none!important;opacity:1!important;transform:none!important}
+  .anim .rise,.anim .avatar,.anim .cover>img,.anim .cover>video,.swap{animation:none!important;opacity:1!important;transform:none!important}
   .anim .reveal{opacity:1!important;transform:none!important;transition:none!important}
   .anim .gallery .reveal,.anim .gallery .reveal img{opacity:1!important;transform:none!important;transition:none!important}
   .anim .action.wa::after,.anim .btn::after{animation:none!important;display:none!important}
@@ -319,7 +314,6 @@ html[dir="ltr"] .sec h2{letter-spacing:.09em;text-transform:uppercase}
 (function(){
 "use strict";
 
-/* نصوص الواجهة بالثلاث لغات */
 var UI = {
   ar:{ save:"حفظ جهة الاتصال", wa:"واتساب", call:"اتصال", call2:"اتصال 2", maps:"الموقع", ig:"إنستغرام", fb:"فيسبوك", tt:"تيك توك", th:"Threads", location:"العنوان",
        review:"قيّمنا على Google", mail:"البريد", web:"الموقع الإلكتروني",
@@ -359,7 +353,7 @@ var MOTION = (C.motion !== false);
 var io = null;
 
 function pickLang(){
-  var q = (location.search.match(/[?&]lang=(ar|fr|en)/i) || [])[1];      // رابط مباشر بلغة محددة: …/?lang=fr
+  var q = (location.search.match(/[?&]lang=(ar|fr|en)/i) || [])[1];
   if(q) return q.toLowerCase();
   try{ var s = localStorage.getItem("nfc4all-lang"); if(s && UI[s]) return s; }catch(e){}
   if(C.autoDetectLang !== false){
@@ -370,13 +364,15 @@ function pickLang(){
 }
 function t(v){ if(!v) return ""; return typeof v === "string" ? v : (v[lang] || v.ar || v.fr || v.en || ""); }
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-
-/* مساعدات الحركة: تضيف كلاس التأثير مع تأخير متسلسل */
 function riseAttr(delay){ return MOTION ? ' class="rise" style="--d:'+delay+'ms"' : ''; }
 function riseOn(cls, delay){ return MOTION ? ' class="'+cls+' rise" style="--d:'+delay+'ms"' : ' class="'+cls+'"'; }
 function revealOn(cls){ return MOTION ? ' class="'+cls+' reveal"' : ' class="'+cls+'"'; }
-/* يسمح بأسماء ملفات فيها مسافات أو أقواس أو حروف عربية */
 function srcU(p){ return esc(encodeURI(String(p))); }
+
+/* ✅ هل هذا الملف فيديو؟ (نستعملها لعرض الغلاف كفيديو) */
+function isVideoFile(p){
+  return /\.(mp4|webm|mov|m4v|ogv)(\?.*)?$/i.test(String(p||""));
+}
 
 function render(){
   var u = UI[lang], html = "";
@@ -386,7 +382,16 @@ function render(){
 
   /* الغلاف + مبدّل اللغة */
   html += '<div class="cover">';
-  if(C.cover) html += '<img src="'+srcU(C.cover)+'" alt="" fetchpriority="high">';
+  if(C.cover){
+    var coverSrc = srcU(C.cover);
+    if(isVideoFile(C.cover)){
+      var posterAttr = C.coverPoster ? ' poster="'+srcU(C.coverPoster)+'"' : '';
+      /* autoplay · muted · loop · playsinline — ضرورية لتشغيل الفيديو تلقائياً على iPhone */
+      html += '<video class="coverVideo" src="'+coverSrc+'"'+posterAttr+' autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>';
+    } else {
+      html += '<img src="'+coverSrc+'" alt="" fetchpriority="high">';
+    }
+  }
   html += '<div class="langs" role="group" aria-label="Language">';
   LANGS.forEach(function(l){
     html += '<button type="button" data-lang="'+l+'" aria-pressed="'+(l===lang)+'" lang="'+l+'">'+LABELS[l]+'</button>';
@@ -493,9 +498,12 @@ function render(){
 
   bind();
   observeReveals();
+
+  /* ✅ بعض الهواتف توقف الفيديو عند تبديل اللغة — نحاول تشغيله مرة أخرى */
+  var v = cardEl.querySelector(".cover video");
+  if(v && v.play){ v.play().catch(function(){}); }
 }
 
-/* ظهور الأقسام تدريجياً عند التمرير */
 function observeReveals(){
   var items = document.querySelectorAll(".reveal");
   if(!MOTION || !items.length) return;
