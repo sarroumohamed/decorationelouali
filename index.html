@@ -68,40 +68,39 @@ var CARD = {
     { label:{ ar:"ديكور داخلي وتنسيق الفضاء",      fr:"Décoration intérieure & aménagement",   en:"Interior decoration & space planning" } }
   ],
 
+  /* --- معرض الأعمال — كل الصور في نفس مجلد index.html ---
+     لحذف صورة: امسح سطرها · لتغيير الترتيب: حرّك الأسطر --- */
   gallery: [
-    "WhatsApp Image 2026-09-08 at 6.11.45 PM (1).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.45 PM (2).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.45 PM (3).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.45 PM (4).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (1).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (2).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (3).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (4).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (5).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (6).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (7).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM (8).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.46 PM.jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.47 PM (3).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.47 PM (4).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.47 PM (6).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM (1).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM (2).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM (3).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM (4).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM (6).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM (7).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.48 PM.jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.49 PM (1).jpeg",
-    "WhatsApp Image 2026-09-08 at 6.11.49 PM (2).jpeg",
+    "0.png",
     "1.png",
-    "WhatsApp Image 2026-09-08 at 6.11.49 PM (4).jpeg",
     "2.png",
     "3.png",
     "4.png",
     "5.png",
     "6.png",
-    "7.png"
+    "7.jpeg",
+    "8.jpeg",
+    "9.jpeg",
+    "10.jpeg",
+    "11.jpeg",
+    "12.jpeg",
+    "13.jpeg",
+    "14.jpeg",
+    "15.jpeg",
+    "16.jpeg",
+    "17.jpeg",
+    "18.jpeg",
+    "19.jpeg",
+    "20.jpeg",
+    "21.jpeg",
+    "22.jpeg",
+    "23.jpeg",
+    "24.jpeg",
+    "25.jpeg",
+    "26.jpeg",
+    "28.jpeg",
+    "29.jpeg",
+    "30.jpeg"
   ],
 
   hours: [],
@@ -154,7 +153,6 @@ img{max-width:100%}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
 
-/* ---- الغلاف — صورة أو فيديو ---- */
 .cover{position:relative;aspect-ratio:16/8;background:#000;overflow:hidden}
 .cover>img,.cover>video{width:100%;height:100%;object-fit:cover;display:block}
 .cover>video{background:#000}
@@ -334,7 +332,6 @@ function riseOn(cls, delay){ return MOTION ? ' class="'+cls+' rise" style="--d:'
 function revealOn(cls){ return MOTION ? ' class="'+cls+' reveal"' : ' class="'+cls+'"'; }
 function srcU(p){ return esc(encodeURI(String(p))); }
 
-/* ✅ هل الغلاف فيديو؟ */
 function isVideoFile(p){
   return /\.(mp4|webm|mov|m4v|ogv)(\?.*)?$/i.test(String(p||""));
 }
@@ -345,7 +342,6 @@ function render(){
   document.documentElement.dir  = (lang === "ar") ? "rtl" : "ltr";
   document.title = t(C.name) + " — " + t(C.role);
 
-  /* ✅ الغلاف — يدعم صورة أو فيديو */
   html += '<div class="cover">';
   if(C.cover){
     if(isVideoFile(C.cover)){
@@ -453,7 +449,6 @@ function render(){
   bind();
   observeReveals();
 
-  /* ✅ حاول تشغيل الفيديو (بعض المتصفحات تحتاج دفعة صغيرة) */
   var v = cardEl.querySelector(".cover video");
   if(v && v.play){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
 }
