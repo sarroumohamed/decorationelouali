@@ -19,6 +19,7 @@ var CARD = {
   /* --- الهوية البصرية --- */
   accent   : "#B3252B",
   cover    : "cover.mp4",        /* ✅ فيديو الغلاف */
+  coverPoster: "",               /* صورة تبان قبل الفيديو — اختياري */
   logo     : "logo.png",
   logoShape: "square",
 
@@ -68,7 +69,7 @@ var CARD = {
     { label:{ ar:"ديكور داخلي وتنسيق الفضاء",      fr:"Décoration intérieure & aménagement",   en:"Interior decoration & space planning" } }
   ],
 
-  /* --- معرض الأعمال — 25 صورة في نفس مجلد index.html ---
+  /* --- معرض الأعمال — 17 صورة في نفس مجلد index.html ---
      لحذف صورة: امسح سطرها · لتغيير الترتيب: حرّك الأسطر --- */
   gallery: [
     "1.jpg",
@@ -87,15 +88,7 @@ var CARD = {
     "14.jpg",
     "15.jpg",
     "16.jpg",
-    "17.jpg",
-    "18.jpg",
-    "19.jpg",
-    "20.jpg",
-    "21.jpg",
-    "22.jpg",
-    "23.jpg",
-    "24.jpg",
-    "25.jpg"
+    "17.jpg"
   ],
 
   hours: [],
@@ -148,13 +141,16 @@ img{max-width:100%}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
 
+/* ---- الغلاف — صورة أو فيديو ---- */
 .cover{position:relative;aspect-ratio:16/8;background:#000;overflow:hidden}
 .cover>img,.cover>video{width:100%;height:100%;object-fit:cover;display:block}
 .cover>video{background:#000}
+.cover.empty{display:none}
 .langs{position:absolute;top:12px;inset-inline-end:12px;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(12,12,12,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:3}
 .langs button{min-width:48px;height:40px;border:0;border-radius:999px;background:transparent;color:#fff;font:600 14px/1 inherit;cursor:pointer;padding:0;transition:background .25s,color .25s}
 .langs button[aria-pressed="true"]{background:#fff;color:#111}
 
+/* ---- الرأس ---- */
 .head{padding:0 20px 4px;text-align:center;position:relative;z-index:2}
 .avatar{width:96px;height:96px;object-fit:cover;display:block;margin:-52px auto 14px;border:4px solid var(--surface);background:var(--soft2);box-shadow:var(--shadow);border-radius:22px}
 .avatar.circle{border-radius:50%}
@@ -163,6 +159,7 @@ a{color:inherit}
 .head .role{margin:6px 0 0;font-size:15px;font-weight:600;color:var(--accent)}
 .head .tag{margin:4px 0 0;font-size:14.5px;color:var(--muted)}
 
+/* ---- الأزرار ---- */
 .cta{padding:20px 20px 0}
 .btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:54px;padding:0 16px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:600 16px/1 inherit;text-decoration:none;cursor:pointer;font-family:inherit;box-shadow:var(--btn-shadow);transition:transform .18s ease}
 .btn svg{width:21px;height:21px;flex:0 0 21px}
@@ -202,7 +199,7 @@ html[dir="ltr"] .sec h2{letter-spacing:.09em;text-transform:uppercase}
 .addr{display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:15px;color:var(--muted);text-decoration:none}
 .addr svg{width:19px;height:19px;flex:0 0 19px;color:var(--accent);margin-top:2px}
 .gallery{display:grid;grid-template-columns:1fr;gap:16px}
-.gallery button{padding:0;border:0;background:var(--soft2);border-radius:16px;overflow:hidden;cursor:pointer;display:block;width:100%;box-shadow:var(--btn-shadow);transition:transform .25s ease;-webkit-tap-highlight-color:transparent}
+.gallery button{padding:0;border:0;background:var(--soft2);border-radius:16px;overflow:hidden;cursor:pointer;display:block;width:100%;box-shadow:var(--btn-shadow);transition:transform .25s ease;-webkit-tap-highlight-color:transparent;min-height:120px}
 .gallery button:active{transform:scale(.985)}
 .gallery img{width:100%;height:auto;display:block}
 .gcount{margin:-2px 0 12px;font-size:13.5px;color:var(--muted)}
@@ -337,10 +334,12 @@ function render(){
   document.documentElement.dir  = (lang === "ar") ? "rtl" : "ltr";
   document.title = t(C.name) + " — " + t(C.role);
 
+  /* الغلاف — الفيديو لا يُحمَّل فوراً، بل بعد تحميل الصفحة */
   html += '<div class="cover">';
   if(C.cover){
     if(isVideoFile(C.cover)){
-      html += '<video src="'+srcU(C.cover)+'" autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>';
+      var pos = C.coverPoster ? ' poster="'+srcU(C.coverPoster)+'"' : '';
+      html += '<video'+pos+' data-src="'+srcU(C.cover)+'" muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture></video>';
     } else {
       html += '<img src="'+srcU(C.cover)+'" alt="" fetchpriority="high">';
     }
@@ -353,7 +352,7 @@ function render(){
 
   html += '<div class="head">';
   var shape = C.logoShape === "circle" ? " circle" : "";
-  if(C.logo) html += '<img class="avatar'+shape+'" src="'+srcU(C.logo)+'" alt="">';
+  if(C.logo) html += '<img class="avatar'+shape+'" src="'+srcU(C.logo)+'" alt="" loading="eager" decoding="async">';
   else       html += '<div class="avatar mono'+shape+'">'+esc(t(C.name).trim().charAt(0))+'</div>';
   html += '<h1'+riseAttr(170)+'>'+esc(t(C.name))+'</h1>';
   if(t(C.role))    html += '<p'+riseOn("role",220)+'>'+esc(t(C.role))+'</p>';
@@ -444,8 +443,41 @@ function render(){
   bind();
   observeReveals();
 
+  /* ============================================================
+     ✅ الفيديو — تحميل متأخر
+     1. الفيديو لا يُحمَّل فوراً (preload="none")
+     2. الصور تُحمَّل أولاً بحرية
+     3. بعد انتهاء الصفحة + 1.5 ثانية → يبدأ الفيديو
+     4. في الشبكة الضعيفة (2G / Save-Data) يُتخطى تماماً
+     ============================================================ */
   var v = cardEl.querySelector(".cover video");
-  if(v && v.play){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
+  if(v){
+    v.addEventListener("error", function(){
+      if(window.console) console.warn("[card] فيديو الغلاف ما تلقاش:", C.cover);
+      if(!C.coverPoster) v.parentNode.classList.add("empty");
+    });
+
+    var cn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var slow = !!(cn && (cn.saveData === true || /(^|-)(2g|slow-2g)$/i.test(cn.effectiveType || "")));
+
+    if(slow){
+      if(window.console) console.info("[card] شبكة ضعيفة — تم تخطي الفيديو");
+    } else {
+      var startVideo = function(){
+        if(v.getAttribute("src")) return;
+        v.setAttribute("src", v.getAttribute("data-src"));
+        v.setAttribute("autoplay", "");
+        var pr = v.play && v.play();
+        if(pr && pr.catch) pr.catch(function(){});
+      };
+      /* انتظر انتهاء تحميل الصفحة كاملاً */
+      if(document.readyState === "complete"){
+        setTimeout(startVideo, 1500);
+      } else {
+        window.addEventListener("load", function(){ setTimeout(startVideo, 1500); });
+      }
+    }
+  }
 }
 
 function observeReveals(){
